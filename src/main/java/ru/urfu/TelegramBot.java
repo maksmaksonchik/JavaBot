@@ -7,20 +7,24 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
-public class Bot implements LongPollingSingleThreadUpdateConsumer {
+/** Класс телеграм бота */
+public class TelegramBot implements LongPollingSingleThreadUpdateConsumer {
     private final TelegramClient telegramClient;
+    private final MessageHandler messageHandler;
 
-    public Bot(String token) {
+    public TelegramBot(String token) {
         telegramClient = new OkHttpTelegramClient(token);
+        messageHandler = new MessageHandler();
     }
 
+    /** Метод обрабатывающий обновление состояния бота, полученное от АПИ */
     @Override
     public void consume(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
             String messageText = update.getMessage().getText();
             long chatId = update.getMessage().getChatId();
 
-            String answerText = String.format("Ты написал:\n\n\"%s\"", messageText);
+            String answerText = messageHandler.getAnswer(messageText);
 
             SendMessage message = SendMessage
                     .builder()
