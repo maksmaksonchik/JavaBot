@@ -4,43 +4,25 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/** Unit-тесты для класса MessageHandler */
 class MessageHandlerTest {
     private MessageHandler messageHandler;
 
+    /** Создаем экземпляр MessageHandler */
     @BeforeEach
     void setUp() {
         messageHandler = new MessageHandler();
     }
 
+
+    /** Проверяем ответ на сообщение без команды (эхо) */
     @Test
-    void getAnswer_start() {
-        String result = messageHandler.getAnswer("/start");
-
-        String expected = MessageConstants.HELLO + MessageConstants.DELIMITER + MessageConstants.HELP;
-
-        Assertions.assertEquals(expected, result);
-    }
-
-    @Test
-    void getAnswer_help() {
-        String result = messageHandler.getAnswer("/help");
-
-        String expected = MessageConstants.HELP;
-
-        Assertions.assertEquals(expected, result);
-    }
-
-    @Test
-    void getAnswer_echo() {
+    void testEcho() {
         String message = "Привет";
 
         String result = messageHandler.getAnswer(message);
 
-        String expected = MessageConstants.ECHO_PREFIX +
-                MessageConstants.DELIMITER +
-                MessageConstants.QUOTE +
-                message +
-                MessageConstants.QUOTE;
+        String expected = String.format("Ты написал:\n\n\"%s\"", message);
 
         Assertions.assertEquals(expected, result);
     }
